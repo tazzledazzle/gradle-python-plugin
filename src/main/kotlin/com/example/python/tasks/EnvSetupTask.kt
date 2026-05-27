@@ -12,6 +12,6 @@ abstract class EnvSetupTask : DefaultTask() {
 
     @TaskAction
     fun setupEnvironment() {
-        envService.get().condaRoot
+        envService.get().bootstrapEnvironment()
     }
 }

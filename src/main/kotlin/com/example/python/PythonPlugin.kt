@@ -25,6 +25,8 @@ class PythonPlugin : Plugin<Project> {
             spec.parameters.installDir.set(extension.installDir)
             spec.parameters.systemArch.set(extension.systemArch)
             spec.parameters.envManagerType.set(extension.envManager)
+            spec.parameters.uvVersion.set(extension.uvVersion)
+            spec.parameters.uvRepoUrl.set(extension.uvRepoUrl)
         }
 
         project.tasks.register("envSetup", EnvSetupTask::class.java)
@@ -49,5 +51,7 @@ class PythonPlugin : Plugin<Project> {
         extension.condaRepoUrl.convention("https://github.com/conda-forge/miniforge/releases/latest/download/")
         extension.installDir.convention(project.layout.projectDirectory)
         extension.envManager.convention("conda")
+        extension.uvVersion.convention("0.4.0")
+        extension.uvRepoUrl.convention("https://github.com/astral-sh/uv/releases/download/")
     }
 }

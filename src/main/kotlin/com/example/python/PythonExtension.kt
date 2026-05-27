@@ -13,4 +13,6 @@ abstract class PythonExtension {
     abstract val installDir: DirectoryProperty
     abstract val systemArch: Property<String>
     abstract val envManager: Property<String>
+    abstract val uvVersion: Property<String>
+    abstract val uvRepoUrl: Property<String>
 }
