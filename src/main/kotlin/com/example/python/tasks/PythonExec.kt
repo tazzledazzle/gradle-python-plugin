@@ -1,14 +1,18 @@
 package com.example.python.tasks
 
+import com.example.python.service.PythonEnvService
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.services.ServiceReference
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 
 abstract class PythonExec : DefaultTask() {
+    @get:ServiceReference("pythonEnvService")
+    abstract val envService: Property<PythonEnvService>
     @get:Input
     abstract val executable: Property<String>
 
