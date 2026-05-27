@@ -25,6 +25,6 @@ gradle test --tests "*PluginSmokeTest" -i
 
 **Passing outcome (confirmed 2026-05-26)**
 
-- `BUILD SUCCESSFUL`
-- `:test UP-TO-DATE` (no failures)
+- `BUILD SUCCESSFUL in 535ms`
+- `:test UP-TO-DATE` (no failures; 7 actionable tasks up-to-date)
 
