@@ -10,5 +10,5 @@ data class CondaInstallSpec(
     val platform: PlatformSpec,
     val repoUsername: String?,
     val repoPassword: String?,
-    val repoHeaders: Map<String, String>
+    val repoHeaders: Map<String, String>,
 )

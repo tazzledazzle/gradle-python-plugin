@@ -12,11 +12,12 @@ class UvEnvResolverTest {
         venvBin.parentFile.mkdirs()
         venvBin.createNewFile()
 
-        val resolved = UvEnvResolver.resolve(
-            projectDir = projectDir,
-            execName = "pytest",
-            platform = PlatformSpec(os = "Linux", arch = "x86_64")
-        )
+        val resolved =
+            UvEnvResolver.resolve(
+                projectDir = projectDir,
+                execName = "pytest",
+                platform = PlatformSpec(os = "Linux", arch = "x86_64"),
+            )
 
         assertEquals(venvBin.absolutePath, resolved.absolutePath)
     }
@@ -28,11 +29,12 @@ class UvEnvResolverTest {
         venvBin.parentFile.mkdirs()
         venvBin.createNewFile()
 
-        val resolved = UvEnvResolver.resolve(
-            projectDir = projectDir,
-            execName = "pytest",
-            platform = PlatformSpec(os = "Windows", arch = "x86_64")
-        )
+        val resolved =
+            UvEnvResolver.resolve(
+                projectDir = projectDir,
+                execName = "pytest",
+                platform = PlatformSpec(os = "Windows", arch = "x86_64"),
+            )
 
         assertEquals(venvBin.absolutePath, resolved.absolutePath)
     }

@@ -14,16 +14,21 @@ class PythonEnvServiceTest {
     @Test
     fun `condaRoot is resolved lazily once per service instance`() {
         val installDir = createTempDir(prefix = "python-env-service")
-        val spec = CondaInstallSpec(
-            version = "test",
-            installer = "miniforge",
-            repoUrl = "https://example.invalid",
-            installDir = installDir,
-            platform = PlatformSpec(os = "Linux", arch = "x86_64"),
-            repoUsername = null,
-            repoPassword = null,
-            repoHeaders = emptyMap()
-        )
+        val spec =
+            CondaInstallSpec(
+                version = "test",
+                installer = "miniforge",
+                repoUrl = "https://example.invalid",
+                installDir = installDir,
+                platform = PlatformSpec(os = "Linux", arch = "x86_64"),
+                repoUsername = null,
+                repoPassword = null,
+                repoHeaders = emptyMap(),
+            )
+        File(installDir, ".gradle/python/conda/test/.installed").apply {
+            parentFile.mkdirs()
+            writeText("installed")
+        }
 
         val first = CondaInstaller.installIfAbsent(spec)
         val second = CondaInstaller.installIfAbsent(spec)
@@ -33,9 +38,36 @@ class PythonEnvServiceTest {
     }
 
     @Test
+    fun `resolveExecutable supports conda backend`() {
+        val installDir = createTempDir(prefix = "python-env-conda")
+        val service = createService(installDir, envManager = "conda")
+        File(installDir, ".gradle/python/conda/test/.installed").apply {
+            parentFile.mkdirs()
+            writeText("installed")
+        }
+        val expected =
+            File(installDir, ".gradle/python/conda/test/envs/3.12.0/bin/python")
+        expected.parentFile.mkdirs()
+        expected.createNewFile()
+
+        val resolved = service.resolveExecutable("python")
+
+        assertEquals(expected.canonicalFile, resolved.canonicalFile)
+    }
+
+    @Test
     fun `resolveExecutable supports uv backend`() {
         val installDir = createTempDir(prefix = "python-env-uv")
         val service = createService(installDir, envManager = "uv")
+        File(installDir, ".gradle/python/uv/0.4.0/uv").apply {
+            parentFile.mkdirs()
+            writeText("#!/bin/sh\necho uv\n")
+            setExecutable(true)
+        }
+        File(installDir, ".venv/pyvenv.cfg").apply {
+            parentFile.mkdirs()
+            writeText("home = .\n")
+        }
         val venvExec = File(installDir, ".venv/bin/pytest")
         venvExec.parentFile.mkdirs()
         venvExec.createNewFile()
@@ -63,21 +95,25 @@ class PythonEnvServiceTest {
         assertTrue(registry.names.contains("pythonEnvService"))
     }
 
-    private fun createService(installDir: File, envManager: String): PythonEnvService {
+    private fun createService(
+        installDir: File,
+        envManager: String,
+    ): PythonEnvService {
         val project = ProjectBuilder.builder().withProjectDir(installDir).build()
-        val service = project.gradle.sharedServices.registerIfAbsent(
-            "pythonEnvServiceTest",
-            PythonEnvService::class.java
-        ) { spec ->
-            spec.parameters.pythonVersion.set("3.12.0")
-            spec.parameters.condaVersion.set("test")
-            spec.parameters.condaInstaller.set("miniforge")
-            spec.parameters.condaRepoUrl.set("https://example.invalid")
-            spec.parameters.installDir.set(project.layout.projectDirectory)
-            spec.parameters.envManagerType.set(envManager)
-            spec.parameters.uvVersion.set("0.4.0")
-            spec.parameters.uvRepoUrl.set("https://example.invalid/")
-        }
+        val service =
+            project.gradle.sharedServices.registerIfAbsent(
+                "pythonEnvServiceTest",
+                PythonEnvService::class.java,
+            ) { spec ->
+                spec.parameters.pythonVersion.set("3.12.0")
+                spec.parameters.condaVersion.set("test")
+                spec.parameters.condaInstaller.set("miniforge")
+                spec.parameters.condaRepoUrl.set("https://example.invalid")
+                spec.parameters.installDir.set(project.layout.projectDirectory)
+                spec.parameters.envManagerType.set(envManager)
+                spec.parameters.uvVersion.set("0.4.0")
+                spec.parameters.uvRepoUrl.set("https://example.invalid/")
+            }
         return service.get()
     }
 }

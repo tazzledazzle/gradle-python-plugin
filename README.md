@@ -27,7 +27,9 @@ The following were resolved and promoted to decisions:
 | `ignoreExitValue` first-class on `PythonExec`? | **Yes, v1.0.** Needed for lint/test/audit tasks where non-zero exit is informational, not fatal. |
 | `BuildService` for shared conda process pool? | **Yes, v1.0.** See new section below. |
 | Support `uv` as alternative env manager? | **Yes, v1.0.** See new section below. |
-| `condaRepoPassword` as Gradle credentials API type? | Open - owner: Terence, target: before v1.0 cut. |
+| `condaRepoPassword` as Gradle credentials API type? | **Closed.** Gradle `PasswordCredentials` via `condaRepoCredentialsName` (default `condaRepo`); see `docs/decisions/conda-repo-password.md`. |
+| `outputFile` / script execution on `PythonExec`? | **Deferred to v1.1.** v1.0 captures stdout/stderr on the task; see `docs/DSL.md`. |
+| `venvExec` + `PythonEnvService` integration? | **Yes, v1.0.** `PythonExec` resolves tools via `envService.resolveExecutable(...)`. |
 
 ## Addition 1: `PythonEnvService` - BuildService for Shared Conda State
 

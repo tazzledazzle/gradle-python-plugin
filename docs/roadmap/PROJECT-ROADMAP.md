@@ -32,7 +32,7 @@ Out of scope for v1.0:
 
 - M1 Core Execution Substrate: complete
 - M2 Build Concurrency Correctness: complete
-- M3 Backend Abstraction (`conda` + `uv`): complete (installer stubs in place; production download logic deferred)
+- M3 Backend Abstraction (`conda` + `uv`): complete (real `CondaInstaller` / `UvInstaller` with idempotent bootstrap)
 - M4 Policy Controls and Quality Gates: complete (`ignoreExitValue`)
 - M5 OSS Hardening and Release Readiness: in progress (CI added; release checklist below)
 
@@ -43,8 +43,11 @@ Out of scope for v1.0:
 - [x] `PythonEnvService` registered with `maxParallelUsages = 1`
 - [x] `envManager` supports `conda` and `uv`
 - [x] Unit and functional test suites pass locally
-- [x] GitHub Actions CI runs `test` and `functionalTest`
-- [ ] `condaRepoPassword` credentials API decision finalized
+- [x] GitHub Actions CI runs `test`, `functionalTest`, `detekt`, and `ktlintCheck`
+- [x] `condaRepoPassword` credentials API decision finalized (`docs/decisions/conda-repo-password.md`)
+- [x] DSL reference published (`docs/DSL.md`)
+- [x] `PythonExec` integrates `venvExec` with `PythonEnvService`
+- [ ] `outputFile` and script execution (deferred v1.1)
 
 ## M1: Core Execution Substrate
 
@@ -55,7 +58,8 @@ Outcomes:
 
 Exit criteria:
 - Non-zero exits fail build by default.
-- Output file handling works for successful and failed runs.
+- `venvExec` resolves executables via shared `PythonEnvService`.
+- Output file handling deferred to v1.1 (`docs/DSL.md`).
 - No regressions in current execution flow.
 
 ## M2: Build Concurrency Correctness
@@ -109,7 +113,7 @@ Exit criteria:
 - Race conditions in shared install directory.
   - Mitigation: service-level serialization and idempotent installers.
 - Credential handling for `condaRepoPassword`.
-  - Mitigation: finalize credentials API decision before v1 cut, avoid logging secrets.
+  - Mitigation: Gradle credentials API + ADR; never log secrets.
 - Divergence in behavior between backends.
   - Mitigation: backend-parity test suite with identical task fixtures.
 

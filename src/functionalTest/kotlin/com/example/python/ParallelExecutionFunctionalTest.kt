@@ -15,11 +15,12 @@ class ParallelExecutionFunctionalTest {
         writeSettings(projectDir)
         writeBuildScript(projectDir)
 
-        val result = GradleRunner.create()
-            .withProjectDir(projectDir)
-            .withPluginClasspath()
-            .withArguments("envSetupA", "envSetupB", "--parallel")
-            .build()
+        val result =
+            GradleRunner.create()
+                .withProjectDir(projectDir)
+                .withPluginClasspath()
+                .withArguments("envSetupA", "envSetupB", "--parallel")
+                .build()
 
         assertEquals(TaskOutcome.SUCCESS, result.task(":envSetupA")?.outcome)
         assertEquals(TaskOutcome.SUCCESS, result.task(":envSetupB")?.outcome)
@@ -30,7 +31,7 @@ class ParallelExecutionFunctionalTest {
         File(projectDir, "settings.gradle.kts").writeText(
             """
             rootProject.name = "functional-test-project"
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
@@ -41,9 +42,24 @@ class ParallelExecutionFunctionalTest {
                 id("com.example.python")
             }
 
-            tasks.register<com.example.python.tasks.EnvSetupTask>("envSetupA")
-            tasks.register<com.example.python.tasks.EnvSetupTask>("envSetupB")
-            """.trimIndent()
+            val condaSentinel = layout.projectDirectory.file(
+                ".gradle/python/conda/24.11.3-0/.installed",
+            )
+            tasks.register("prepareCondaSentinel") {
+                outputs.file(condaSentinel)
+                doLast {
+                    condaSentinel.asFile.parentFile.mkdirs()
+                    condaSentinel.asFile.writeText("installed")
+                }
+            }
+
+            tasks.register<com.example.python.tasks.EnvSetupTask>("envSetupA") {
+                dependsOn("prepareCondaSentinel")
+            }
+            tasks.register<com.example.python.tasks.EnvSetupTask>("envSetupB") {
+                dependsOn("prepareCondaSentinel")
+            }
+            """.trimIndent(),
         )
     }
 }

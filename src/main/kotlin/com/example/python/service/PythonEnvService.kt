@@ -39,7 +39,7 @@ abstract class PythonEnvService : BuildService<PythonEnvService.Params>, AutoClo
             version = parameters.uvVersion.get(),
             installDir = parameters.installDir.asFile.get(),
             platform = platform,
-            repoUrl = parameters.uvRepoUrl.get()
+            repoUrl = parameters.uvRepoUrl.get(),
         )
     }
 
@@ -54,9 +54,7 @@ abstract class PythonEnvService : BuildService<PythonEnvService.Params>, AutoClo
                 val venvBin = if (platform.os == "Windows") "Scripts" else "bin"
                 File(condaRoot, "envs/${parameters.pythonVersion.get()}/$venvBin/$execName")
             }
-            else -> throw IllegalStateException(
-                "Unsupported envManager '$envManager'. Expected 'conda' or 'uv'."
-            )
+            else -> error("Unsupported envManager '$envManager'. Expected 'conda' or 'uv'.")
         }
     }
 
@@ -69,9 +67,10 @@ abstract class PythonEnvService : BuildService<PythonEnvService.Params>, AutoClo
             "conda" -> {
                 condaRoot
             }
-            else -> throw IllegalStateException(
-                "Unsupported envManager '${parameters.envManagerType.get()}'. Expected 'conda' or 'uv'."
-            )
+            else ->
+                error(
+                    "Unsupported envManager '${parameters.envManagerType.get()}'. Expected 'conda' or 'uv'.",
+                )
         }
     }
 
@@ -84,7 +83,7 @@ abstract class PythonEnvService : BuildService<PythonEnvService.Params>, AutoClo
             platform = platform,
             repoUsername = parameters.condaRepoUsername.orNull,
             repoPassword = parameters.condaRepoPassword.orNull,
-            repoHeaders = emptyMap()
+            repoHeaders = emptyMap(),
         )
 
     override fun close() {

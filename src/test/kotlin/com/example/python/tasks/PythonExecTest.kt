@@ -58,6 +58,5 @@ class PythonExecTest {
             "sh" to listOf("-c", "printf 'fail'; printf 'bad' 1>&2; exit 3")
         }
 
-    private fun isWindows(): Boolean =
-        System.getProperty("os.name").lowercase().contains("win")
+    private fun isWindows(): Boolean = System.getProperty("os.name").lowercase().contains("win")
 }

@@ -48,6 +48,5 @@ class PythonExecIgnoreExitValueTest {
             "sh" to listOf("-c", "printf 'warn'; printf 'oops' 1>&2; exit 5")
         }
 
-    private fun isWindows(): Boolean =
-        System.getProperty("os.name").lowercase().contains("win")
+    private fun isWindows(): Boolean = System.getProperty("os.name").lowercase().contains("win")
 }

@@ -9,8 +9,9 @@ Objectives:
 - Ensure stdout/stderr/exit code are consistently captured.
 
 Tasks:
-- Define and document execution contract for scripts vs environment executables.
-- Add/verify task properties for arguments, output file, and resolved executable behavior.
+- Define and document execution contract for environment executables (`venvExec`) and explicit `executable`.
+- Add/verify task properties for arguments and resolved executable behavior.
+- **Deferred v1.1:** `outputFile`, script-file execution mode (see `docs/DSL.md`).
 - Add unit tests for:
   - successful exit path
   - non-zero exit path
@@ -98,8 +99,8 @@ Tasks:
   - Gradle TestKit functional tests for end-to-end behavior
   - parallel execution regression tests
 - Add static quality checks:
-  - Kotlin style/static checks (project chosen tooling)
-  - formatting checks
+  - `detekt` (config: `config/detekt/detekt.yml`)
+  - `ktlint` via `org.jlleitschuh.gradle.ktlint`
 - Add CI workflow(s) for PR and main branches:
   - fail mode on PR
   - optional warn-only examples on main/nightly
@@ -114,7 +115,8 @@ Objectives:
 - Make adoption and contribution straightforward.
 
 Tasks:
-- Publish DSL reference for extension and task properties.
+- Publish DSL reference for extension and task properties (`docs/DSL.md` — implemented properties only).
+- Close `condaRepoPassword` credentials decision (`docs/decisions/conda-repo-password.md`).
 - Add migration notes for users currently using workaround patterns.
 - Maintain decision log and open question list.
 - Add v1.0 release checklist:
@@ -143,6 +145,16 @@ Parallelizable after Epic 1:
 ## Acceptance Criteria for v1.0
 
 - `ignoreExitValue` is first-class and documented.
-- `PythonEnvService` prevents parallel bootstrap races.
-- `envManager = "uv"` works with parity-focused behavior.
-- CI and test suites enforce the above decisions continuously.
+- `PythonEnvService` prevents parallel bootstrap races; `PythonExec` uses `venvExec` → `resolveExecutable`.
+- `envManager = "uv"` works with parity-focused behavior; real `CondaInstaller` / `UvInstaller` downloads (idempotent).
+- `detekt` and `ktlintCheck` run in CI.
+- `condaRepoPassword` resolved via Gradle credentials API (ADR accepted).
+- **Out of v1.0 scope:** `outputFile`, script-file execution (v1.1 backlog).
+
+## v1.1 Backlog (explicit deferrals)
+
+| Item | Notes |
+|------|--------|
+| `outputFile` on `PythonExec` | Write stdout/stderr or tool output to a configured file |
+| Script execution mode | Run `.py` files with interpreter resolution |
+| Backend-parity functional tests with live downloads | Optional CI matrix job (network-dependent) |
