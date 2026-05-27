@@ -28,6 +28,24 @@ Out of scope for v1.0:
 
 ## Milestones
 
+## Implementation Status (2026-05-26)
+
+- M1 Core Execution Substrate: complete
+- M2 Build Concurrency Correctness: complete
+- M3 Backend Abstraction (`conda` + `uv`): complete (installer stubs in place; production download logic deferred)
+- M4 Policy Controls and Quality Gates: complete (`ignoreExitValue`)
+- M5 OSS Hardening and Release Readiness: in progress (CI added; release checklist below)
+
+## v1.0 Release Checklist
+
+- [x] `PythonExec` execution contract with stdout/stderr/exit capture
+- [x] `ignoreExitValue` first-class property (default `false`)
+- [x] `PythonEnvService` registered with `maxParallelUsages = 1`
+- [x] `envManager` supports `conda` and `uv`
+- [x] Unit and functional test suites pass locally
+- [x] GitHub Actions CI runs `test` and `functionalTest`
+- [ ] `condaRepoPassword` credentials API decision finalized
+
 ## M1: Core Execution Substrate
 
 Outcomes:
