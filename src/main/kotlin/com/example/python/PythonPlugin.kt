@@ -10,5 +10,8 @@ class PythonPlugin : Plugin<Project> {
         project.extensions.create("python", PythonExtension::class.java)
         project.tasks.register("envSetup", EnvSetupTask::class.java)
         project.tasks.register("pythonExec", PythonExec::class.java)
+        project.tasks.withType(PythonExec::class.java).configureEach {
+            it.ignoreExitValue.convention(false)
+        }
     }
 }

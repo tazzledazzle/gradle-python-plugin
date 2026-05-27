@@ -15,6 +15,9 @@ abstract class PythonExec : DefaultTask() {
     @get:Input
     abstract val arguments: ListProperty<String>
 
+    @get:Input
+    abstract val ignoreExitValue: Property<Boolean>
+
     @get:Internal
     abstract val stdout: Property<String>
 
@@ -26,6 +29,7 @@ abstract class PythonExec : DefaultTask() {
 
     init {
         arguments.convention(emptyList())
+        ignoreExitValue.convention(false)
         stdout.convention("")
         stderr.convention("")
         exitValue.convention(-1)
@@ -45,7 +49,7 @@ abstract class PythonExec : DefaultTask() {
         stderr.set(err)
         exitValue.set(code)
 
-        if (code != 0) {
+        if (code != 0 && !ignoreExitValue.get()) {
             throw GradleException("Python process failed with exit code $code")
         }
     }
