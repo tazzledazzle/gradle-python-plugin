@@ -1,4 +1,4 @@
-package com.example.python
+package com.tazzledazzle.python
 
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
@@ -39,7 +39,7 @@ class ParallelExecutionFunctionalTest {
         File(projectDir, "build.gradle.kts").writeText(
             """
             plugins {
-                id("com.example.python")
+                id("com.tazzledazzle.python")
             }
 
             val condaSentinel = layout.projectDirectory.file(
@@ -53,10 +53,10 @@ class ParallelExecutionFunctionalTest {
                 }
             }
 
-            tasks.register<com.example.python.tasks.EnvSetupTask>("envSetupA") {
+            tasks.register<com.tazzledazzle.python.tasks.EnvSetupTask>("envSetupA") {
                 dependsOn("prepareCondaSentinel")
             }
-            tasks.register<com.example.python.tasks.EnvSetupTask>("envSetupB") {
+            tasks.register<com.tazzledazzle.python.tasks.EnvSetupTask>("envSetupB") {
                 dependsOn("prepareCondaSentinel")
             }
             """.trimIndent(),

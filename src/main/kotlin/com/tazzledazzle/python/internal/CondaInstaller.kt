@@ -1,8 +1,8 @@
-package com.example.python.internal
+package com.tazzledazzle.python.internal
 
 import java.io.File
 import java.net.HttpURLConnection
-import java.net.URL
+import java.net.URI
 
 object CondaInstaller {
     fun detectPlatform(systemArch: String?): PlatformSpec {
@@ -100,7 +100,7 @@ object CondaInstaller {
         repoPassword: String?,
     ) {
         val connection =
-            (URL(url).openConnection() as HttpURLConnection).apply {
+            (URI(url).toURL().openConnection() as HttpURLConnection).apply {
                 connectTimeout = 30_000
                 readTimeout = 300_000
                 if (!repoUsername.isNullOrBlank()) {

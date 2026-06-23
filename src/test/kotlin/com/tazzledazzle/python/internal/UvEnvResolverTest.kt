@@ -1,4 +1,4 @@
-package com.example.python.internal
+package com.tazzledazzle.python.internal
 
 import java.io.File
 import kotlin.test.Test
@@ -7,7 +7,7 @@ import kotlin.test.assertEquals
 class UvEnvResolverTest {
     @Test
     fun `resolve uses bin directory on unix`() {
-        val projectDir = createTempDir(prefix = "uv-resolver")
+        val projectDir = kotlin.io.path.createTempDirectory(prefix = "uv-resolver").toFile()
         val venvBin = File(projectDir, ".venv/bin/pytest")
         venvBin.parentFile.mkdirs()
         venvBin.createNewFile()
@@ -24,7 +24,7 @@ class UvEnvResolverTest {
 
     @Test
     fun `resolve uses Scripts directory on windows`() {
-        val projectDir = createTempDir(prefix = "uv-resolver-win")
+        val projectDir = kotlin.io.path.createTempDirectory(prefix = "uv-resolver-win").toFile()
         val venvBin = File(projectDir, ".venv/Scripts/pytest.exe")
         venvBin.parentFile.mkdirs()
         venvBin.createNewFile()

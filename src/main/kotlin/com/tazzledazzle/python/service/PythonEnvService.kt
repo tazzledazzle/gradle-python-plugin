@@ -1,10 +1,10 @@
-package com.example.python.service
+package com.tazzledazzle.python.service
 
-import com.example.python.internal.CondaInstallSpec
-import com.example.python.internal.CondaInstaller
-import com.example.python.internal.PlatformSpec
-import com.example.python.internal.UvEnvResolver
-import com.example.python.internal.UvInstaller
+import com.tazzledazzle.python.internal.CondaInstallSpec
+import com.tazzledazzle.python.internal.CondaInstaller
+import com.tazzledazzle.python.internal.PlatformSpec
+import com.tazzledazzle.python.internal.UvEnvResolver
+import com.tazzledazzle.python.internal.UvInstaller
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.services.BuildService

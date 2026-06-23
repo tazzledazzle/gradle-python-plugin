@@ -1,6 +1,6 @@
-package com.example.python.tasks
+package com.tazzledazzle.python.tasks
 
-import com.example.python.service.PythonEnvService
+import com.tazzledazzle.python.service.PythonEnvService
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.provider.ListProperty

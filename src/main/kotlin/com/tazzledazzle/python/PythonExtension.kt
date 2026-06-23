@@ -1,4 +1,4 @@
-package com.example.python
+package com.tazzledazzle.python
 
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property

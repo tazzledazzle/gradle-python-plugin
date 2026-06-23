@@ -1,4 +1,4 @@
-package com.example.python.internal
+package com.tazzledazzle.python.internal
 
 import java.io.File
 import kotlin.test.Test
@@ -7,7 +7,7 @@ import kotlin.test.assertEquals
 class CondaInstallerTest {
     @Test
     fun `installIfAbsent is idempotent`() {
-        val installDir = createTempDir(prefix = "conda-installer")
+        val installDir = kotlin.io.path.createTempDirectory(prefix = "conda-installer").toFile()
         val spec =
             CondaInstallSpec(
                 version = "24.11.3-0",

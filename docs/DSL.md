@@ -6,7 +6,7 @@ This document lists **implemented** properties and tasks only. Deferred APIs are
 
 ```kotlin
 plugins {
-    id("com.example.python")
+    id("com.tazzledazzle.python")
 }
 ```
 

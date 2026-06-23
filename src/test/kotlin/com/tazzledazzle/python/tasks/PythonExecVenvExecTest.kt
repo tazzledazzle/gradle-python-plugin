@@ -1,6 +1,6 @@
-package com.example.python.tasks
+package com.tazzledazzle.python.tasks
 
-import com.example.python.service.PythonEnvService
+import com.tazzledazzle.python.service.PythonEnvService
 import org.gradle.testfixtures.ProjectBuilder
 import java.io.File
 import kotlin.test.Test
@@ -10,7 +10,7 @@ import kotlin.test.assertFailsWith
 class PythonExecVenvExecTest {
     @Test
     fun `buildCommand resolves venvExec through env service`() {
-        val projectDir = createTempDir(prefix = "python-exec-venv")
+        val projectDir = kotlin.io.path.createTempDirectory(prefix = "python-exec-venv").toFile()
         val project = ProjectBuilder.builder().withProjectDir(projectDir).build()
         val service =
             project.gradle.sharedServices.registerIfAbsent(

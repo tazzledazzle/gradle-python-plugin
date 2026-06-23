@@ -1,4 +1,4 @@
-package com.example.python.internal
+package com.tazzledazzle.python.internal
 
 import java.io.File
 import kotlin.test.Test
@@ -8,7 +8,7 @@ import kotlin.test.assertTrue
 class UvInstallerTest {
     @Test
     fun `installIfAbsent is idempotent for uv binary path`() {
-        val installDir = createTempDir(prefix = "uv-installer")
+        val installDir = kotlin.io.path.createTempDirectory(prefix = "uv-installer").toFile()
         val platform = PlatformSpec(os = "Linux", arch = "x86_64")
         val uvBin = File(installDir, ".gradle/python/uv/0.4.0/uv")
         uvBin.parentFile.mkdirs()

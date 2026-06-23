@@ -1,4 +1,4 @@
-package com.example.python.tasks
+package com.tazzledazzle.python.tasks
 
 import org.gradle.api.GradleException
 import org.gradle.testfixtures.ProjectBuilder

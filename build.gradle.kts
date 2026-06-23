@@ -1,7 +1,10 @@
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+
 plugins {
     `java-gradle-plugin`
-    kotlin("jvm") version "2.0.21"
-    id("io.gitlab.arturbosch.detekt") version "1.23.7"
+    kotlin("jvm") version "2.3.0"
+    id("io.gitlab.arturbosch.detekt") version "1.23.8"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
 }
 
@@ -51,8 +54,16 @@ tasks.check {
 gradlePlugin {
     plugins {
         create("pythonPlugin") {
-            id = "com.example.python"
-            implementationClass = "com.example.python.PythonPlugin"
+            id = "com.tazzledazzle.python"
+            implementationClass = "com.tazzledazzle.python.PythonPlugin"
         }
     }
+}
+
+// Kotlin DSL
+tasks.withType<Detekt>().configureEach {
+    jvmTarget = "1.8"
+}
+tasks.withType<DetektCreateBaselineTask>().configureEach {
+    jvmTarget = "1.8"
 }

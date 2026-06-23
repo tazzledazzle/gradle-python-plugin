@@ -1,8 +1,8 @@
-package com.example.python
+package com.tazzledazzle.python
 
-import com.example.python.service.PythonEnvService
-import com.example.python.tasks.EnvSetupTask
-import com.example.python.tasks.PythonExec
+import com.tazzledazzle.python.service.PythonEnvService
+import com.tazzledazzle.python.tasks.EnvSetupTask
+import com.tazzledazzle.python.tasks.PythonExec
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

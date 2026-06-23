@@ -1,4 +1,4 @@
-package com.example.python.internal
+package com.tazzledazzle.python.internal
 
 data class PlatformSpec(
     val os: String,

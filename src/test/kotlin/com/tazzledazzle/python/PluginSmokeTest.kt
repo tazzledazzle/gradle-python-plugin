@@ -1,7 +1,7 @@
-package com.example.python
+package com.tazzledazzle.python
 
-import com.example.python.tasks.EnvSetupTask
-import com.example.python.tasks.PythonExec
+import com.tazzledazzle.python.tasks.EnvSetupTask
+import com.tazzledazzle.python.tasks.PythonExec
 import org.gradle.testfixtures.ProjectBuilder
 import kotlin.test.Test
 import kotlin.test.assertNotNull

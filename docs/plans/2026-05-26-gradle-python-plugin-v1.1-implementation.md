@@ -29,8 +29,8 @@ fun `pythonExec runs explicit executable and captures output`() {
     writeSettings(projectDir)
     File(projectDir, "build.gradle.kts").writeText(
         """
-        plugins { id("com.example.python") }
-        tasks.register<com.example.python.tasks.PythonExec>("runEcho") {
+        plugins { id("com.tazzledazzle.python") }
+        tasks.register<com.tazzledazzle.python.tasks.PythonExec>("runEcho") {
             executable.set(if (System.getProperty("os.name").contains("Windows", true)) "cmd" else "sh")
             arguments.set(
                 if (System.getProperty("os.name").contains("Windows", true)) {
@@ -255,8 +255,12 @@ abstract val script: RegularFileProperty
 
 private fun resolveExecutableCommand(): String = when {
     script.isPresent -> envService.get().resolveExecutable("python").absolutePath
-    venvExec.isPresent -> ...
-    executable.isPresent -> ...
+    venvExec.isPresent -> {
+        // ...
+    }
+    executable.isPresent -> {
+        // ...
+    }
     else -> throw GradleException("...")
 }
 
@@ -314,7 +318,9 @@ git commit -m "feat: add script execution mode to PythonExec"
 ```kotlin
 // @EnabledIfEnvironmentVariable(named = "CI_NETWORK_TESTS", matches = "true")
 @Test
-fun `conda envSetup creates install sentinel`() { ... }
+fun `conda envSetup creates install sentinel`() {
+    // ...
+    }
 ```
 
 **Step 2: Add CI job `integration`**

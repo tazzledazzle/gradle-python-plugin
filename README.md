@@ -42,11 +42,11 @@ Without a `BuildService`, every `PythonExec` task that runs in a parallel Gradle
 `PythonEnvService` is a `BuildService<PythonEnvService.Params>` registered by `PythonPlugin` at apply time. It holds the resolved conda root and Python binary path as service-level state computed once on first access. All `PythonExec` and `EnvSetupTask` instances declare it as a `@ServiceReference`, which Gradle uses to enforce the `maxParallelUsages` constraint and to inject the shared instance.
 
 ```kotlin
-package com.example.python.service
+package com.tazzledazzle.python.service
 
-import com.example.python.internal.CondaInstallSpec
-import com.example.python.internal.CondaInstaller
-import com.example.python.internal.PlatformSpec
+import com.tazzledazzle.python.internal.CondaInstallSpec
+import com.tazzledazzle.python.internal.CondaInstaller
+import com.tazzledazzle.python.internal.PlatformSpec
 import org.gradle.api.provider.Property
 import org.gradle.api.services.BuildService
 import org.gradle.api.services.BuildServiceParameters
@@ -79,7 +79,7 @@ abstract class PythonEnvService : BuildService<PythonEnvService.Params>, AutoClo
     fun resolveExecutable(execName: String): File =
         when (parameters.envManagerType.get()) {
             "uv"    -> UvEnvResolver.resolve(parameters.installDir.get(), execName, platform)
-            else    -> com.example.python.internal.VenvExecutableResolver.resolve(
+            else    -> com.tazzledazzle.python.internal.VenvExecutableResolver.resolve(
                 condaRoot, parameters.pythonVersion.get(), execName, platform
             )
         }
@@ -163,7 +163,7 @@ val uvRepoUrl: Property<String> = objects.property(String::class.java)
 ### `UvInstaller.kt`
 
 ```kotlin
-package com.example.python.internal
+package com.tazzledazzle.python.internal
 
 import java.io.File
 import java.net.HttpURLConnection
@@ -249,7 +249,7 @@ object UvInstaller {
 ### `UvEnvResolver.kt`
 
 ```kotlin
-package com.example.python.internal
+package com.tazzledazzle.python.internal
 
 import java.io.File
 
