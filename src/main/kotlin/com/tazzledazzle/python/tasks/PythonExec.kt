@@ -56,6 +56,7 @@ abstract class PythonExec : DefaultTask() {
     @TaskAction
     fun executeProcess() {
         val command = buildCommand()
+        logger.info("Executing command: $command")
         val process =
             ProcessBuilder(command)
                 .directory(project.projectDir)
@@ -64,7 +65,8 @@ abstract class PythonExec : DefaultTask() {
         val out = process.inputStream.bufferedReader().use { it.readText() }
         val err = process.errorStream.bufferedReader().use { it.readText() }
         val code = process.waitFor()
-
+        logger.info("Output is $out")
+        logger.info("Error Output is $err")
         stdout.set(out)
         stderr.set(err)
         exitValue.set(code)
