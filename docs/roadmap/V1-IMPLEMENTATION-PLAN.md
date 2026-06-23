@@ -153,8 +153,11 @@ Parallelizable after Epic 1:
 
 ## v1.1 Backlog (explicit deferrals)
 
+Executable plan: [`docs/plans/2026-05-26-gradle-python-plugin-v1.1-implementation.md`](../plans/2026-05-26-gradle-python-plugin-v1.1-implementation.md)
+
 | Item | Notes |
 |------|--------|
 | `outputFile` on `PythonExec` | Write stdout/stderr or tool output to a configured file |
 | Script execution mode | Run `.py` files with interpreter resolution |
 | Backend-parity functional tests with live downloads | Optional CI matrix job (network-dependent) |
+| v1 release hardening | PythonExec functional test, migration guide, DSL examples |
