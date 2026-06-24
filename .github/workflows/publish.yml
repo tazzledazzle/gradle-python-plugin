@@ -1,0 +1,37 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Verify before publish
+        run: ./gradlew check --no-daemon
+
+      - name: Publish to Gradle Plugin Portal
+        run: |
+          mkdir -p ~/.gradle
+          {
+            echo "gradle.publish.key=${GRADLE_PUBLISH_KEY}"
+            echo "gradle.publish.secret=${GRADLE_PUBLISH_SECRET}"
+          } >> ~/.gradle/gradle.properties
+          ./gradlew publishPlugins --no-daemon
+        env:
+          GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}
+          GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}

@@ -145,6 +145,7 @@ Maintainers: see **[docs/PUBLISHING.md](docs/PUBLISHING.md)** for API keys, `pub
 | Doc | Contents |
 |-----|----------|
 | [docs/DSL.md](docs/DSL.md) | Public API reference |
+| [docs/MIGRATION.md](docs/MIGRATION.md) | Upgrading from pre-v1 workarounds |
 | [docs/PUBLISHING.md](docs/PUBLISHING.md) | Plugin Portal release process |
 | [docs/DESIGN.md](docs/DESIGN.md) | Architecture and design decisions |
 | [docs/roadmap/PROJECT-ROADMAP.md](docs/roadmap/PROJECT-ROADMAP.md) | Milestones and release checklist |
@@ -152,7 +153,7 @@ Maintainers: see **[docs/PUBLISHING.md](docs/PUBLISHING.md)** for API keys, `pub
 
 ## Roadmap
 
-v1.1 (planned): `outputFile`, script-file execution mode. See [docs/plans/2026-05-26-gradle-python-plugin-v1.1-implementation.md](docs/plans/2026-05-26-gradle-python-plugin-v1.1-implementation.md).
+v1.1 features (`outputFile`, `script` execution) are implemented on `main`. See [docs/DSL.md](docs/DSL.md).
 
 ## License
 

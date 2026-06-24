@@ -3,12 +3,15 @@ package com.tazzledazzle.python.tasks
 import com.tazzledazzle.python.service.PythonEnvService
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.services.ServiceReference
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 
@@ -17,7 +20,14 @@ abstract class PythonExec : DefaultTask() {
     abstract val envService: Property<PythonEnvService>
 
     /**
-     * Explicit executable path or command name on PATH (used when [venvExec] is not set).
+     * Python script file executed via managed `python` (mutually exclusive with [venvExec] and [executable]).
+     */
+    @get:InputFile
+    @get:Optional
+    abstract val script: RegularFileProperty
+
+    /**
+     * Explicit executable path or command name on PATH (used when [venvExec] and [script] are not set).
      */
     @get:Input
     @get:Optional
@@ -35,6 +45,13 @@ abstract class PythonExec : DefaultTask() {
 
     @get:Input
     abstract val ignoreExitValue: Property<Boolean>
+
+    /**
+     * Optional file to persist captured stdout after execution completes.
+     */
+    @get:OutputFile
+    @get:Optional
+    abstract val outputFile: RegularFileProperty
 
     @get:Internal
     abstract val stdout: Property<String>
@@ -71,6 +88,11 @@ abstract class PythonExec : DefaultTask() {
         stderr.set(err)
         exitValue.set(code)
 
+        outputFile.orNull?.asFile?.let { file ->
+            file.parentFile.mkdirs()
+            file.writeText(out)
+        }
+
         if (code != 0 && !ignoreExitValue.get()) {
             throw GradleException(
                 "Python process '${command.first()}' exited with code $code.\n" +
@@ -79,10 +101,26 @@ abstract class PythonExec : DefaultTask() {
         }
     }
 
-    internal fun buildCommand(): List<String> = listOf(resolveExecutableCommand()) + arguments.get()
+    internal fun buildCommand(): List<String> {
+        if (script.isPresent && venvExec.isPresent) {
+            throw GradleException("PythonExec 'script' cannot be used together with 'venvExec'.")
+        }
+        if (script.isPresent && executable.isPresent) {
+            throw GradleException("PythonExec 'script' cannot be used together with 'executable'.")
+        }
+
+        val executableCommand = resolveExecutableCommand()
+        return if (script.isPresent) {
+            listOf(executableCommand, script.get().asFile.canonicalFile.absolutePath) + arguments.get()
+        } else {
+            listOf(executableCommand) + arguments.get()
+        }
+    }
 
     private fun resolveExecutableCommand(): String =
         when {
+            script.isPresent ->
+                envService.get().resolveExecutable("python").absolutePath
             venvExec.isPresent ->
                 envService.get().resolveExecutable(venvExec.get()).absolutePath
             executable.isPresent -> {
@@ -96,7 +134,7 @@ abstract class PythonExec : DefaultTask() {
             }
             else ->
                 throw GradleException(
-                    "PythonExec requires either 'venvExec' (managed environment) or 'executable' (explicit path).",
+                    "PythonExec requires 'script', 'venvExec', or 'executable'.",
                 )
         }
 }

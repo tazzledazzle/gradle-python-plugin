@@ -1,0 +1,12 @@
+{
+  "mode": "interactive",
+  "workflow": {
+    "research": true,
+    "plan_check": true,
+    "nyquist_validation": false,
+    "security_enforcement": false
+  },
+  "planning": {
+    "commit_docs": true
+  }
+}

@@ -29,3 +29,24 @@ jobs:
 
       - name: Run functional tests
         run: ./gradlew functionalTest --no-daemon
+
+  integration:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CI_NETWORK_TESTS: "true"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Run network-backed backend parity tests
+        run: ./gradlew functionalTest --tests "*BackendParityFunctionalTest" --no-daemon
