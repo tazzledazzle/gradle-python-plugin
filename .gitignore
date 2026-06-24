@@ -2,3 +2,7 @@
 
 .gradle/
 build/
+
+# Local publish credentials (use ~/.gradle/gradle.properties instead)
+gradle.publish.key
+gradle.publish.secret

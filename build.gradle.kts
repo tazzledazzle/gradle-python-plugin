@@ -4,12 +4,20 @@ import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 plugins {
     `java-gradle-plugin`
     kotlin("jvm") version "2.3.0"
+    id("com.gradle.plugin-publish") version "1.3.1"
     id("io.gitlab.arturbosch.detekt") version "1.23.8"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
 }
 
+group = "com.tazzledazzle.gradle"
+version = property("version") as String
+
 repositories {
     mavenCentral()
+}
+
+kotlin {
+    jvmToolchain(17)
 }
 
 val functionalTestSourceSet =
@@ -52,18 +60,27 @@ tasks.check {
 }
 
 gradlePlugin {
+    website.set("https://github.com/tazzledazzle/gradle-python-plugin")
+    vcsUrl.set("https://github.com/tazzledazzle/gradle-python-plugin.git")
     plugins {
         create("pythonPlugin") {
             id = "com.tazzledazzle.python"
             implementationClass = "com.tazzledazzle.python.PythonPlugin"
+            displayName = "Gradle Python Plugin"
+            description =
+                "Run Python tools from Gradle with Conda or uv environment bootstrap, " +
+                "shared BuildService state, and configurable exit-code policy."
+            tags.set(listOf("python", "conda", "uv", "gradle", "build"))
         }
     }
 }
 
-// Kotlin DSL
 tasks.withType<Detekt>().configureEach {
-    jvmTarget = "1.8"
+    jvmTarget = "17"
+    reports {
+        html.required.set(true)
+    }
 }
 tasks.withType<DetektCreateBaselineTask>().configureEach {
-    jvmTarget = "1.8"
+    jvmTarget = "17"
 }
